@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a blog</title>
+    <title>Edit</title>
 </head>
 <body>
         @if ($errors->any())
@@ -17,21 +17,20 @@
 
         @endif
 
-    <h1>Create</h1>
-    <form method="POST" action="/dashboard/create">
+    <h1>Edit</h1>
+    <form method="POST" action="/dashboard/{{ $blog->id }}/edit">
         @csrf
         <div>
             <label for="title">Title</label>
-            <input type="text" id="title" name="title" required autofocus>
+            <input type="text" id="title" name="title" value="{{ $blog->title }}" required autofocus>
         </div>
         <div>
             <label for="content">Content</label>
-            <textarea type="textarea" id="content" name="content" required></textarea>
+            <textarea type="textarea" id="content" name="content" required>{{ $blog->content }}</textarea>
         </div>
         <div>
-            <button type="submit">Create</button>
+            <button type="submit">Update</button>
         </div>
     </form>
-
 </body>
 </html>

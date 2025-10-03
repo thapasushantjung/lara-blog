@@ -16,6 +16,7 @@ namespace App\Models{
  * @property int $id
  * @property string $title
  * @property string $content
+ * @property string $slug
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -26,6 +27,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Blog whereUserId($value)

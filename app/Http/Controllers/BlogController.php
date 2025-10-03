@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class BlogController extends Controller
@@ -54,8 +55,9 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
+        $slug = Str::slug($validated['title'], '-');
 
-        $blog = new Blog(['title' => $validated['title'], 'content' => $validated['content']]);
+        $blog = new Blog(['title' => $validated['title'], 'content' => $validated['content'], 'slug' => $slug]);
         $id = Auth::id();
         $user = User::find($id);
         $user->blogs()->save($blog);
@@ -66,9 +68,14 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $username, string $slug)
     {
-        //
+        $user = User::where('username', $username)->firstOrFail();
+
+        $blog = $user->blogs()->where('slug', $slug)->firstOrFail();
+
+        return view('blog.show', ['blog' => $blog, 'user' => $user]);
+
     }
 
     /**
@@ -76,6 +83,12 @@ class BlogController extends Controller
      */
     public function edit(string $id)
     {
+        $blog = Blog::find($id);
+        if ($blog && $blog->user_id === Auth::id()) {
+            return view('blog.edit', ['blog' => $blog]);
+        } else {
+            return redirect('dashboard')->withErrors(['error' => 'Blog not found or unauthorized']);
+        }
         //
     }
 
@@ -84,14 +97,37 @@ class BlogController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $blog = Blog::find($id);
+        if ($blog && $blog->user_id === Auth::id()) {
+            $blog->title = $validated['title'];
+            $blog->content = $validated['content'];
+            $blog->save();
+
+            return redirect('dashboard');
+        } else {
+            return redirect('dashboard')->withErrors(['error' => 'Blog not found or unauthorized']);
+        }
         //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
+        $blog = Blog::find($id);
+        if ($blog && $blog->user_id === Auth::id()) {
+            $blog->delete();
+
+            return redirect('dashboard');
+        } else {
+            return redirect('dashboard')->withErrors(['error' => 'Blog not found or unauthorized']);
+        }
         //
     }
 }

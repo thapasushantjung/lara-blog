@@ -6,6 +6,16 @@
     <title>Dashboard</title>
 </head>
 <body>
+        @if ($errors->any())
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+
+        @endif
         Welcome to your dashboard!
         {{ Auth::user()->name }}
         <button type="button"
@@ -19,6 +29,7 @@
         <div class="blog-post" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
             <h2>{{ $blog->title }}</h2>
             <p>{{ $blog->content }}</p>
+                <a href={{Auth::user()->name."/".$blog->slug}}>{{$blog->title}}</a>
                 <button type="button"
                 onclick="window.location.href='/dashboard/{{ $blog->id }}/edit'"
                 >Edit</button>
