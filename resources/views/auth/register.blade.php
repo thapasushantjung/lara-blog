@@ -23,6 +23,9 @@
             <label for="name">Name:</label>
             <input type="text" name="name" value="{{old('name')}}">
             <br>
+            <label for="username">UserName:</label>
+            <input type="text" name="username" value="{{old('username')}}">
+            <br>
             <label for="email">Email:</label>
             <input type="email" name="email" value="{{old('email')}}">
             <br>

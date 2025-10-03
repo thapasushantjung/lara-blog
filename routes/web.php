@@ -11,6 +11,6 @@ Route::get('/register', function () {
 });
 Route::post('/register', [UserController::class, 'register']);
 
-Route::view('/login', 'auth.login');
+Route::view('/login', 'auth.login')->middleware('guest');
 Route::post('/login', [UserController::class, 'authenticate']);
 Route::get('/ram', [UserController::class, 'ram'])->middleware('auth');

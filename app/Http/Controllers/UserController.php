@@ -18,6 +18,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users',
+            'username' => 'sometimes|nullable|string|max:50|unique:users',
             'password' => ['required', Password::min(8)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
 
         ]);
@@ -25,15 +26,9 @@ class UserController extends Controller
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
+        $user->username = $validated['username'];
         $user->password = Hash::make($validated['password']);
         $user->save();
-        Auth::login($user, true);
-
-        /* $user = User::create([ */
-        /*     'name' => $validated['name'], */
-        /*     'email' => $validated[email], */
-        /*     'password' => Hash::make($validated['password']), */
-        /* ]); */
 
         return redirect('/');
 
@@ -60,13 +55,6 @@ class UserController extends Controller
 
     public function ram(): View
     {
-
-        $user = Auth::user();
-
-        if ($user) {
-            return view('ram')->with('user', $user);
-        } else {
-            return 'not loggedin';
-        }
+        return view('ram');
     }
 }
