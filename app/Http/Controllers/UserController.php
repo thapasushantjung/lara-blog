@@ -30,7 +30,7 @@ class UserController extends Controller
         $user->password = Hash::make($validated['password']);
         $user->save();
 
-        return redirect('/');
+        return redirect('dashboard');
 
     }
 
